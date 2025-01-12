@@ -6,34 +6,11 @@
 namespace WidgetsExample
 {
 
-    /*
-     * List boxes and dropdowns needs an instance of a listmodel
-     * to know what elements they have.
-     */
-    class DemoListModel : public gcn::ListModel
-    {
-    public:
-        int getNumberOfElements() override { return 5; }
-
-        std::string getElementAt(int i) override
-        {
-            switch (i)
-            {
-                case 0: return std::string("zero");
-                case 1: return std::string("one");
-                case 2: return std::string("two");
-                case 3: return std::string("three");
-                case 4: return std::string("four");
-                default: // Just to keep warnings away
-                    return std::string("");
-            }
-        }
-    };
-
     class MainContainer : public gcn::ActionListener
     {
     public:
-        MainContainer(gcn::Gui& gui, int width, int height)
+        MainContainer(gcn::Gui& gui, int width, int height) :
+            demoListModel{{"zero", "one", "two", "three", "four"}}
         {
             // Load the image font.
             font = std::make_unique<gcn::ImageFont>(
@@ -79,6 +56,9 @@ namespace WidgetsExample
             inputBox->addActionListener(this);
 
             textField = std::make_unique<gcn::TextField>("Text field");
+
+            passwordField = std::make_unique<gcn::TextField>("password");
+            passwordField->setMaskingChar('*');
 
             textBox = std::make_unique<gcn::TextBox>("Lorem ipsum dolor sit amet consectetur\n"
                                                      "adipiscing elit Integer vitae ultrices\n"
@@ -150,6 +130,7 @@ namespace WidgetsExample
             top->add(imageButton.get(), 10, 290);
             top->add(imageTextButton.get(), 10, 380);
             top->add(textField.get(), 375, 10);
+            top->add(passwordField.get(), 375, 30);
             top->add(textBoxScrollArea.get(), 290, 50);
             top->add(inputBox.get(), 270, 180);
             top->add(listBox.get(), 290, 200);
@@ -220,7 +201,7 @@ namespace WidgetsExample
          * All of the widgets
          */
         std::unique_ptr<gcn::Container> top; // A top container
-        DemoListModel demoListModel;
+        gcn::StringListModel demoListModel;
         std::unique_ptr<gcn::Label> label; // A label
         std::unique_ptr<gcn::Icon> icon; // An icon (image)
         std::unique_ptr<gcn::Button> button; // A button
@@ -228,6 +209,7 @@ namespace WidgetsExample
         std::unique_ptr<gcn::ImageTextButton> imageTextButton; // An image text button
         std::unique_ptr<gcn::InputBox> inputBox; // An input box
         std::unique_ptr<gcn::TextField> textField; // One-line text field
+        std::unique_ptr<gcn::TextField> passwordField; // One-line password field
         std::unique_ptr<gcn::TextBox> textBox; // Multi-line text box
         std::unique_ptr<gcn::ScrollArea> textBoxScrollArea; // Scroll area for the text box
         std::unique_ptr<gcn::ListBox> listBox; // A list box
